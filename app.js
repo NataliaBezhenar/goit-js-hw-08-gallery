@@ -78,28 +78,31 @@ function createGalleryMarkup(images) {
     .map(({ preview, original, description }) => {
       return `
 <li class="gallery__item">
+<a
+class="gallery__link"
+href="${original}"
+>
 <img class="gallery__image"
   src="${preview}"
+  data-source="${original}"
   alt="${description}"
 />
+</a>
 </li>
 `;
     })
     .join("");
 }
 
-function findOriginalImg(previewImgObj, galleryItemsArray) {
-  return galleryItemsArray.find((imgObj) => {
-    return imgObj.description === previewImgObj.getAttribute("alt");
-  }).original;
-}
 
 function onImgClick(e) {
+  e.preventDefault();
   if (!e.target.classList.contains("gallery__image")) {
     return;
   }
+  
   lightBox.classList.add("is-open");
-  lightBoxImg.setAttribute("src", findOriginalImg(e.target, galleryItems));
+  lightBoxImg.setAttribute("src", e.target.dataset.source);
   lightBoxImg.setAttribute("alt", e.target.alt);
 }
 
@@ -108,7 +111,6 @@ function onCloseBtnClick(e) {
   if (!e.target.classList.contains("lightbox__button")) {
     return;
   }
-
   lightBox.classList.remove("is-open");
   lightBoxImg.setAttribute("src", "");
   lightBoxImg.setAttribute("alt", "");
