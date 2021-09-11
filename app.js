@@ -65,10 +65,13 @@ const galleryItems = [
 ];
 
 const imgContainer = document.querySelector(".gallery");
-
 const imgMarkup = createGalleryMarkup(galleryItems);
-
 imgContainer.insertAdjacentHTML("beforeend", imgMarkup);
+const lightBox = document.querySelector(".lightbox");
+const lightBoxImg = lightBox.querySelector(".lightbox__image");
+imgContainer.addEventListener("click", onImgClick);
+const closeBtn = lightBox.querySelector(".lightbox__button");
+closeBtn.addEventListener("click", onCloseBtnClick);
 
 function createGalleryMarkup(images) {
   return images
@@ -85,10 +88,6 @@ function createGalleryMarkup(images) {
     .join("");
 }
 
-const lightBox = document.querySelector(".lightbox");
-const lightBoxImg = lightBox.querySelector(".lightbox__image");
-imgContainer.addEventListener("click", onImgClick);
-
 function findOriginalImg(previewImgObj, galleryItemsArray) {
   return galleryItemsArray.find((imgObj) => {
     return imgObj.description === previewImgObj.getAttribute("alt");
@@ -102,4 +101,15 @@ function onImgClick(e) {
   lightBox.classList.add("is-open");
   lightBoxImg.setAttribute("src", findOriginalImg(e.target, galleryItems));
   lightBoxImg.setAttribute("alt", e.target.alt);
+}
+
+function onCloseBtnClick(e) {
+  console.log(e.target.classList);
+  if (!e.target.classList.contains("lightbox__button")) {
+    return;
+  }
+
+  lightBox.classList.remove("is-open");
+  lightBoxImg.setAttribute("src", "");
+  lightBoxImg.setAttribute("alt", "");
 }
