@@ -114,6 +114,9 @@ function closeModalByKey(e) {
   if (e.code === "Escape") {
     closeModal();
   }
+  if (e.code === "ArrowLeft" || e.code === "ArrowRight") {
+    swapImages(e, galleryItems);
+  }
 }
 
 const closeModal = () => {
@@ -128,3 +131,13 @@ const openModal = (evt) => {
   lightBoxImg.setAttribute("alt", evt.target.alt);
 };
 
+function swapImages(evt, arr) {
+  const index = arr.findIndex((obj) => {
+    return obj.original === lightBoxImg.getAttribute("src");
+  });
+  if (evt.code === "ArrowRight" && arr[index + 1]) {
+    lightBoxImg.setAttribute("src", arr[index + 1].original);
+  } else if (evt.code === "ArrowLeft" && arr[index - 1]) {
+    lightBoxImg.setAttribute("src", arr[index - 1].original);
+  }
+}
