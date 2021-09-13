@@ -69,6 +69,7 @@ const imgMarkup = createGalleryMarkup(galleryItems);
 imgContainer.insertAdjacentHTML("beforeend", imgMarkup);
 const lightBox = document.querySelector(".lightbox");
 const lightBoxImg = lightBox.querySelector(".lightbox__image");
+
 function createGalleryMarkup(images) {
   return images
     .map(({ preview, original, description }) => {
@@ -109,7 +110,6 @@ function closeModalByClick(e) {
   }
 }
 
-window.addEventListener("keydown", closeModalByKey);
 function closeModalByKey(e) {
   if (e.code === "Escape") {
     closeModal();
@@ -123,9 +123,11 @@ const closeModal = () => {
   lightBox.classList.remove("is-open");
   lightBoxImg.setAttribute("src", "");
   lightBoxImg.setAttribute("alt", "");
+  window.removeEventListener("keydown", closeModalByKey);
 };
 
 const openModal = (evt) => {
+  window.addEventListener("keydown", closeModalByKey);
   lightBox.classList.add("is-open");
   lightBoxImg.setAttribute("src", evt.target.dataset.source);
   lightBoxImg.setAttribute("alt", evt.target.alt);
@@ -137,7 +139,9 @@ function swapImages(evt, arr) {
   });
   if (evt.code === "ArrowRight" && arr[index + 1]) {
     lightBoxImg.setAttribute("src", arr[index + 1].original);
+    lightBoxImg.setAttribute("alt", arr[index + 1].description);
   } else if (evt.code === "ArrowLeft" && arr[index - 1]) {
     lightBoxImg.setAttribute("src", arr[index - 1].original);
+    lightBoxImg.setAttribute("alt", arr[index - 1].description);
   }
 }
